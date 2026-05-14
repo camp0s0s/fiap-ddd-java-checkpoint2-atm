@@ -12,14 +12,12 @@ public class TerminalBancarioController {
     private ContaService contaService;
     private AutorizacaoService autorizacaoService;
 
-    // Construtor conforme o Diagrama de Classes (Página 9)
     public TerminalBancarioController(ContaService contaService, AutorizacaoService autorizacaoService) {
         this.contaService = contaService;
         this.autorizacaoService = autorizacaoService;
     }
 
     public void exibirMenuPrincipal() {
-        // Fluxo de Acesso Seguro (Requisito Alpha mantido no Beta)
         if (!realizarLogin()) {
             System.out.println("ACESSO BLOQUEADO. Procure sua agência.");
             return;
