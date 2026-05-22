@@ -37,7 +37,6 @@ public class ContaAcesso implements Autorizavel {
         return this.bloqueado;
     }
 
-    // Getter para o número de tentativas (útil para o Controller)
     public Integer getTentativas() {
         return tentativas;
     }

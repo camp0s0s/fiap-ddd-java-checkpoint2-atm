@@ -17,18 +17,28 @@ public abstract class Conta extends BaseEntity {
         this.status = StatusConta.ATIVA;
     }
 
-    public final void realizarSaque(Dinheiro valor) throws Exception {
-        if (status != StatusConta.ATIVA) throw new Exception("Conta não está ativa.");
-        if (!saldo.ehMaiorOuIgual(valor)) throw new Exception("Saldo insuficiente.");
-        
-        this.saldo = saldo.subtrair(valor);
-        registrarMovimentacao("SAQUE", valor);
-        aplicarRegraDeTaxa();
+    public final void realizarSaque(Dinheiro valor) {
+    if (status == StatusConta.BLOQUEADA || contaAcesso.isBloqueado()) {
+        throw new AcessoBloqueadoException("Não é possível sacar. A conta está bloqueada.");
+    }
+    if (valor.getValor().compareTo(java.math.BigDecimal.ZERO) <= 0) {
+        throw new ValorInvalidoException("O valor do saque deve ser maior que zero.");
+    }
+    if (!saldo.ehMaiorOuIgual(valor)) {
+        throw new SaldoInsuficienteException("Saldo Insuficiente! Não foi possível realizar o saque do valor selecionado.");
+    }
+
+    this.saldo = saldo.subtrair(valor);
+    registrarMovimentacao("SAQUE", valor);
+    aplicarRegraDeTaxa();
     }
 
     public void realizarDeposito(Dinheiro valor) {
-        this.saldo = saldo.somar(valor);
-        registrarMovimentacao("DEPOSITO", valor);
+        if (valor.getValor().compareTo(java.math.BigDecimal.ZERO) <= 0) {
+        throw new ValorInvalidoException("O valor do depósito deve ser positivo.");
+    }
+    this.saldo = saldo.somar(valor);
+    registrarMovimentacao("DEPOSITO", valor);
     }
 
     protected abstract void aplicarRegraDeTaxa();
@@ -36,7 +46,6 @@ public abstract class Conta extends BaseEntity {
     protected void registrarMovimentacao(String tipo, Dinheiro valor) {
         this.historico.add(new Movimentacao(tipo, valor));
     }
-
     public Dinheiro getSaldo() { 
         return saldo; 
     }
