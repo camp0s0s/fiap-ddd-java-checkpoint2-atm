@@ -1,8 +1,12 @@
 package br.fiap.bank.atm.presentation;
 import br.fiap.bank.atm.application.AutorizacaoService;
 import br.fiap.bank.atm.application.ContaService;
+import br.fiap.bank.atm.model.AcessoBloqueadoException;
 import br.fiap.bank.atm.model.Dinheiro;
 import br.fiap.bank.atm.model.Movimentacao;
+import br.fiap.bank.atm.model.SaldoInsuficienteException;
+import br.fiap.bank.atm.model.ValorInvalidoException;
+
 import java.math.BigDecimal;
 import java.util.Scanner;
 
@@ -18,10 +22,15 @@ public class TerminalBancarioController {
     }
 
     public void exibirMenuPrincipal() {
+        try {
         if (!realizarLogin()) {
-            System.out.println("ACESSO BLOQUEADO. Procure sua agência.");
             return;
         }
+    } catch (AcessoBloqueadoException e) {
+        System.out.println("\n[!] " + e.getMessage());
+        System.out.println("Sessão encerrada por segurança.");
+        return;
+    }
 
         int opcao = 0;
         while (opcao != 5) {
@@ -41,11 +50,17 @@ public class TerminalBancarioController {
                     case 2 -> realizarDeposito();
                     case 3 -> realizarSaque();
                     case 4 -> exibirMovimentacoes();
-                    case 5 -> System.out.println("Obrigado por usar o FIAP Bank!");
+                    case 5 -> System.out.println("Sessão finalizada com sucesso.");
                     default -> System.out.println("Opção inválida.");
                 }
+            } catch (SaldoInsuficienteException | ValorInvalidoException | AcessoBloqueadoException e) {
+                System.out.println("/\nSTATUS DA TRANSAÇÃO: ERRO");
+                System.out.println("[!] " + e.getMessage());
+                System.out.println("Retornando ao Menu Principal...");
+            } catch (NumberFormatException e) {
+                System.out.println("\n[!] Erro de digitação: Por favor, digite apenas números.");
             } catch (Exception e) {
-                System.out.println("Erro na operação: " + e.getMessage());
+                System.out.println("\n[!] Ocorreu um erro inesperado no sistema: " + e.getMessage());
             }
         }
     }
