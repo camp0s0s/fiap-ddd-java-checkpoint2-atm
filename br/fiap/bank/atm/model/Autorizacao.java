@@ -1,5 +1,6 @@
 package br.fiap.bank.atm.model;
 
-public class Autorizacao {
-    
+public interface Autorizacao {
+    Boolean autorizar(String senha);
+    Boolean isBloqueado();
 }
