@@ -54,7 +54,7 @@ public class TerminalBancarioController {
                     default -> System.out.println("Opção inválida.");
                 }
             } catch (SaldoInsuficienteException | ValorInvalidoException | AcessoBloqueadoException e) {
-                System.out.println("/\nSTATUS DA TRANSAÇÃO: ERRO");
+                System.out.println("\nSTATUS DA TRANSAÇÃO: ERRO");
                 System.out.println("[!] " + e.getMessage());
                 System.out.println("Retornando ao Menu Principal...");
             } catch (NumberFormatException e) {
@@ -93,9 +93,7 @@ public class TerminalBancarioController {
 
     public void realizarSaque() {
         System.out.print("Digite o valor do saque: ");
-        BigDecimal valor = new BigDecimal(scanner.nextLine());
-        
-        // Dispara o fluxo que pode lançar SaldoInsuficienteException ou ValorInvalidoException [cite: 65, 66, 75]
+        BigDecimal valor = new BigDecimal(scanner.nextLine());        
         contaService.realizarSaque(new Dinheiro(valor));
         System.out.println("Saque processado com sucesso! Retire as cédulas.");
     }

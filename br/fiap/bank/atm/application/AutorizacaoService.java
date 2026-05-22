@@ -11,7 +11,7 @@ public class AutorizacaoService {
     }
 
     public boolean validarSenha(String senhaDigitada) {
-        boolean valido = conta.getContaAcesso().validarSenha(senhaDigitada);
+        boolean valido = conta.getContaAcesso().autorizar(senhaDigitada);
         
         if (conta.getContaAcesso().isBloqueado()) {
             conta.setStatus(StatusConta.BLOQUEADA);
