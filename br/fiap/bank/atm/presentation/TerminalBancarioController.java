@@ -92,14 +92,12 @@ public class TerminalBancarioController {
     }
 
     public void realizarSaque() {
-        try {
-            System.out.print("Digite o valor do saque: ");
-            BigDecimal valor = new BigDecimal(scanner.nextLine());
-            contaService.realizarSaque(new Dinheiro(valor));
-            System.out.println("Saque realizado com sucesso!");
-        } catch (Exception e) {
-            System.out.println("Falha no saque: " + e.getMessage());
-        }
+        System.out.print("Digite o valor do saque: ");
+        BigDecimal valor = new BigDecimal(scanner.nextLine());
+        
+        // Dispara o fluxo que pode lançar SaldoInsuficienteException ou ValorInvalidoException [cite: 65, 66, 75]
+        contaService.realizarSaque(new Dinheiro(valor));
+        System.out.println("Saque processado com sucesso! Retire as cédulas.");
     }
 
     public void exibirMovimentacoes() {

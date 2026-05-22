@@ -14,7 +14,7 @@ public class ContaService {
         conta.realizarDeposito(valor);
     }
 
-    public void realizarSaque(Dinheiro valor) throws Exception {
+    public void realizarSaque(Dinheiro valor) {
         conta.realizarSaque(valor);
     }
 
